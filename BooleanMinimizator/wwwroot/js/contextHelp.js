@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Убираем фокус
+    // Убираем фокусЙФ
     document.body.addEventListener("focusout", (e) => {
         if (lastFocusedElement === e.target) {
             lastFocusedElement = null;
@@ -124,16 +124,8 @@ keys.forEach(key => {
     });
 });
 
-// Support button functionality
-const helpButton = document.getElementById('helpButton');
+// Support button is now a direct link - no JavaScript needed
 const supportText = document.getElementById('supportText');
-
-if (helpButton && supportText) {
-    helpButton.addEventListener('click', () => {
-        const isVisible = supportText.style.display !== 'none';
-        supportText.style.display = isVisible ? 'none' : 'block';
-    });
-}
 
 // Context help tooltips
 document.addEventListener('DOMContentLoaded', () => {

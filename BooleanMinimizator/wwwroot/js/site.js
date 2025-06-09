@@ -40,12 +40,4 @@ document.querySelectorAll(".key").forEach(button => {
     });
 });
 
-// Подсказка
-document.getElementById("helpButton").addEventListener("click", function () {
-    let supportText = document.getElementById("supportText");
-    if (supportText.style.display === "none") {
-        supportText.style.display = "block";
-    } else {
-        supportText.style.display = "none";
-    }
-});
+// Подсказка - теперь кнопка поддержки является прямой ссылкой HTML

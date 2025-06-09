@@ -415,12 +415,12 @@
     </ul>
 </section>
 
-<button type="button" id="helpButton" data-help="Открывает информацию о поддержке">Поддержка</button>
+<a href="/UserHelp/vvedenie.htm" target="_blank" id="helpButton" class="button" data-help="Открывает информацию о поддержке">Поддержка</a>
 
-<div id="supportText" class="support-text" style="display:none;">
+<div id="supportText" class="support-text">
     <h3>Как получить поддержку</h3>
-    <p>Если у вас возникли проблемы, обратитесь к нам по электронной почте.</p>
-    <p><strong>Email:</strong> support@website.com</p>
+    <p>Если у вас возникли проблемы, обратитесь к нам в Telegram.</p>
+    <p><strong>Telegram:</strong> @@obemamaster</p>
     <p>Мы всегда готовы помочь!</p>
 </div>
 
@@ -513,6 +513,24 @@
         align-items: center;
         gap: 10px;
         margin: 15px 0;
+    }
+    
+    #helpButton.button {
+        display: inline-block;
+        background: linear-gradient(145deg, #555, #555);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: 0.3s;
+        margin: 10px 5px;
+        text-decoration: none;
+    }
+    
+    #helpButton.button:hover {
+        background: linear-gradient(145deg, #222, #333);
     }
 
     .keyboard {
