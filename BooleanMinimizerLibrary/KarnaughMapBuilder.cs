@@ -40,7 +40,7 @@ namespace BooleanMinimizerLibrary
             return steps;
         }
 
-        private List<KarnaughStep> BuildForTwoVariablesSteps(string vector, List<string> variables)
+        public List<KarnaughStep> BuildForTwoVariablesSteps(string vector, List<string> variables)
         {
             var steps = new List<KarnaughStep>();
 
@@ -89,7 +89,7 @@ namespace BooleanMinimizerLibrary
             return steps;
         }
 
-        private List<KarnaughStep> BuildForThreeVariablesSteps(string vector, List<string> variables)
+        public List<KarnaughStep> BuildForThreeVariablesSteps(string vector, List<string> variables)
         {
             var steps = new List<KarnaughStep>();
 
@@ -138,7 +138,7 @@ namespace BooleanMinimizerLibrary
             return steps;
         }
 
-        private List<KarnaughStep> BuildForFourVariablesSteps(string vector, List<string> variables)
+        public List<KarnaughStep> BuildForFourVariablesSteps(string vector, List<string> variables)
         {
             var steps = new List<KarnaughStep>();
 
@@ -194,7 +194,7 @@ namespace BooleanMinimizerLibrary
             return steps;
         }
 
-        private HashSet<string> GetVariables(Node node)
+        public HashSet<string> GetVariables(Node node)
         {
             var variables = new HashSet<string>();
             if (node == null) return variables;
@@ -231,7 +231,7 @@ namespace BooleanMinimizerLibrary
                 return BuildForFourVariables(vector, variables);
         }
 
-        private List<List<string>> BuildForTwoVariables(string vector, List<string> variables)
+        public List<List<string>> BuildForTwoVariables(string vector, List<string> variables)
         {
             return new List<List<string>>
             {
@@ -241,7 +241,7 @@ namespace BooleanMinimizerLibrary
             };
         }
 
-        private List<List<string>> BuildForThreeVariables(string vector, List<string> variables)
+        public List<List<string>> BuildForThreeVariables(string vector, List<string> variables)
         {
             return new List<List<string>>
             {
@@ -253,7 +253,7 @@ namespace BooleanMinimizerLibrary
             };
         }
 
-        private List<List<string>> BuildForFourVariables(string vector, List<string> variables)
+        public List<List<string>> BuildForFourVariables(string vector, List<string> variables)
         {
             return new List<List<string>>
             {
@@ -414,7 +414,7 @@ namespace BooleanMinimizerLibrary
             return result;
         }
 
-        private bool IsValidAreaWithWrap(List<List<string>> map, bool[,] covered, int startRow, int startCol, int height, int width)
+        public bool IsValidAreaWithWrap(List<List<string>> map, bool[,] covered, int startRow, int startCol, int height, int width)
         {
             int rowCount = map.Count - 1;
             int colCount = map[0].Count - 1;
@@ -434,7 +434,7 @@ namespace BooleanMinimizerLibrary
             return true;
         }
 
-        private List<int> GetPowersOfTwoUpTo(int n)
+        public List<int> GetPowersOfTwoUpTo(int n)
         {
             var result = new List<int>();
             int power = 1;
@@ -446,7 +446,7 @@ namespace BooleanMinimizerLibrary
             return result;
         }
 
-        private static bool IsValidArea(List<List<string>> map, bool[,] covered,
+        public static bool IsValidArea(List<List<string>> map, bool[,] covered,
             int startRow, int startColMap, int height, int width,
             int rows, int cols)
         {
@@ -466,7 +466,7 @@ namespace BooleanMinimizerLibrary
             return true;
         }
 
-        private void MarkAreaWithWrap(bool[,] covered, Area area, int rowCount, int colCount)
+        public void MarkAreaWithWrap(bool[,] covered, Area area, int rowCount, int colCount)
         {
             for (int dr = 0; dr < area.Height; dr++)
             {

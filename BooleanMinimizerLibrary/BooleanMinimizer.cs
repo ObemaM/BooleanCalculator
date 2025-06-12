@@ -46,7 +46,7 @@ namespace BooleanMinimizerLibrary
         }
 
         // Поиск индексов элементов в векторе, равных заданному символу
-        private static List<int> GetIndicesByValue(string vector, char value)
+        public static List<int> GetIndicesByValue(string vector, char value)
         {
             var indices = new List<int>();
             for (int i = 0; i < vector.Length; i++)
@@ -56,7 +56,7 @@ namespace BooleanMinimizerLibrary
         }
 
         // Возвращаем имена переменных по количеству переменных (до 4)
-        private static List<string> GetDefaultVariables(int length)
+        public static List<string> GetDefaultVariables(int length)
         {
             int n = (int)Math.Log(length, 2);
             var names = new[] { "w", "x", "y", "z" };
@@ -64,7 +64,7 @@ namespace BooleanMinimizerLibrary
         }
 
         // Представление импликанта (группа минтермов), где '-' означает «неважно»
-        private class Implicant
+        public class Implicant
         {
             public string Bits; // Например, 1-0-
             public HashSet<int> CoveredMinterms;
@@ -110,7 +110,7 @@ namespace BooleanMinimizerLibrary
         }
 
         // Алгоритм Квайна-Мак-Класки для поиска простых импликантов
-        private static List<Implicant> QuineMcCluskey(List<int> minterms, int variableCount)
+        public static List<Implicant> QuineMcCluskey(List<int> minterms, int variableCount)
         {
             // Инициализация импликантов с битовыми строками
             var implicants = minterms.Select(m => new Implicant(
@@ -158,7 +158,7 @@ namespace BooleanMinimizerLibrary
         }
 
         // Поиск необходимых простых импликантов для покрытия всех минтермов
-        private static List<Implicant> FindEssentialPrimeImplicants(List<Implicant> primeImplicants, List<int> minterms)
+        public static List<Implicant> FindEssentialPrimeImplicants(List<Implicant> primeImplicants, List<int> minterms)
         {
             var essentials = new List<Implicant>();
             var uncovered = new HashSet<int>(minterms);
@@ -198,7 +198,7 @@ namespace BooleanMinimizerLibrary
 
         // Формируем выражение из списка импликантов
         // positive = true для МДНФ (AND в импликанте), false для МКНФ (OR в импликанте)
-        private static string BuildExpression(List<Implicant> implicants, List<string> variables, bool positive)
+        public static string BuildExpression(List<Implicant> implicants, List<string> variables, bool positive)
         {
             var terms = new List<string>();
 

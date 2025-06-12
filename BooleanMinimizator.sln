@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooleanMinimizator", "Boole
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooleanMinimizerLibrary", "BooleanMinimizerLibrary\BooleanMinimizerLibrary.csproj", "{0FB3C2C7-9372-4ADC-A47E-1BB451F31DE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorTests", "CalculatorTests\CalculatorTests.csproj", "{470D7EE9-EC52-4CCD-B73F-B9E66CAB04F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +23,15 @@ Global
 		{0FB3C2C7-9372-4ADC-A47E-1BB451F31DE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FB3C2C7-9372-4ADC-A47E-1BB451F31DE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FB3C2C7-9372-4ADC-A47E-1BB451F31DE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{470D7EE9-EC52-4CCD-B73F-B9E66CAB04F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{470D7EE9-EC52-4CCD-B73F-B9E66CAB04F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{470D7EE9-EC52-4CCD-B73F-B9E66CAB04F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{470D7EE9-EC52-4CCD-B73F-B9E66CAB04F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B12A5C6F-A865-4277-B36C-ABDAA106C21A}
 	EndGlobalSection
 EndGlobal
