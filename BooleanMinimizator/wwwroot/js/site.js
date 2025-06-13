@@ -30,6 +30,12 @@ document.querySelectorAll(".key").forEach(button => {
         const end = input.selectionEnd;
         const text = this.innerText;
 
+        // Проверка: не вставлять, если длина уже 64 символа
+        if (input.value.length - (end - start) + text.length > 64) {
+            // Можно добавить короткое уведомление, если нужно
+            return;
+        }
+
         // Вставка текста в позицию курсора
         input.value = input.value.slice(0, start) + text + input.value.slice(end);
 

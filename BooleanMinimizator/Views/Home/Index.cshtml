@@ -10,7 +10,8 @@
     <form asp-action="Index" method="post">
         <label for="inputField">Введите функцию или её вектор:</label>
         <input type="text" asp-for="InputFunction" id="inputField" placeholder="Например: 01110110"
-               data-help="Введите логическое выражение или вектор функции. Например: 01110110 или (x ∧ y) ∨ ¬z">
+               data-help="Введите логическое выражение или вектор функции. Например: 01110110 или (x ∧ y) ∨ ¬z"
+               maxlength="64">
 
         <div class="button-container">
             <button type="submit" data-help="Нажмите для построения таблицы истинности и минимизации">Построить</button>
@@ -559,6 +560,13 @@
             hint.style.display = 'none';
         }
     }
+
+    // Добавляем обработчик для ограничения длины ввода
+    document.getElementById('inputField').addEventListener('input', function(e) {
+        if (this.value.length > 64) {
+            this.value = this.value.slice(0, 64);
+        }
+    });
 
     function generateRandomExpression() {
         const operators = ['∧', '∨', '⊕', '→', '↔', '↓', '↑'];
