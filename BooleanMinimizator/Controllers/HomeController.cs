@@ -21,6 +21,7 @@ namespace BooleanMinimizator.Controllers
                 {
                     // Remove all spaces from the input
                     model.InputFunction = model.InputFunction.Replace(" ", "");
+
                     var syntaxAnalyzer = new SyntaxAnalyzer();
                     Node rootNode = syntaxAnalyzer.Parse(model.InputFunction);
 
