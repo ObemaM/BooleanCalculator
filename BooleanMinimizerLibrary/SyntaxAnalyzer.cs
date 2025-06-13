@@ -182,7 +182,7 @@ namespace BooleanMinimizerLibrary
             }
 
             if (!IsPowerOfTwo(result.Length))
-                ThrowError("Вектор должен быть длины степени два (1, 2, 4, 8...)");
+                ThrowError("Вектор должен быть длины степени два (1, 2, 4, 8, 16, 32)");
 
             return result;
         }

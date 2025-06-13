@@ -75,7 +75,7 @@ namespace CalculatorTests
         [TestMethod]
         public void QuineMcCluskey_IdentifiesPrimeImplicants()
         {
-            var minterms = new List<int> { 0, 1, 2, 5};
+            var minterms = new List<int> { 0, 1, 2, 5 };
             var primeImplicants = BooleanMinimizer.QuineMcCluskey(minterms, 3); // Changed to 3 variables
 
             var expectedBits = new[] { "00-", "0-0", "-01" }; // Updated expected bits
@@ -439,6 +439,220 @@ namespace CalculatorTests
 
             Assert.IsTrue(steps.Count > 0);
             Assert.IsTrue(steps[0].Description.Contains("заголовок"));
+        }
+    }
+
+    [TestClass]
+    public class FunctionVectorBuilderTests
+    {
+        private FunctionVectorBuilder builder;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            builder = new FunctionVectorBuilder();
+        }
+
+        [TestMethod]
+        public void BuildVector_AndExpression_ReturnsCorrectVector()
+        {
+            // x ∧ y
+            var node = new Node(NodeType.And,
+                left: new Node(NodeType.Variable, "x"),
+                right: new Node(NodeType.Variable, "y"));
+
+            var vector = builder.BuildVector(node);
+
+            Assert.AreEqual("0001", vector); // x ∧ y
+        }
+
+        [TestMethod]
+        public void BuildVector_ConstantOne_ReturnsSingleOne()
+        {
+            var node = new Node(NodeType.Constant, "1");
+
+            var vector = builder.BuildVector(node);
+
+            Assert.AreEqual("1", vector);
+        }
+
+        [TestMethod]
+        public void BuildVector_VectorWithoutVariables_InferVariables()
+        {
+            var node = new Node(NodeType.Vector, "1010");
+
+            var vector = builder.BuildVector(node);
+
+            Assert.AreEqual("1010", vector);
+            CollectionAssert.AreEqual(new List<string> { "x", "y" }, node.Variables);
+        }
+
+        [TestMethod]
+        public void BuildTruthTable_OrExpression_IsCorrect()
+        {
+            // x ∨ y
+            var node = new Node(NodeType.Or,
+                left: new Node(NodeType.Variable, "x"),
+                right: new Node(NodeType.Variable, "y"));
+
+            var table = builder.BuildTruthTable(node);
+
+            Assert.AreEqual(4, table.Count);
+            Assert.IsFalse(table[0]["F"]); // 00
+            Assert.IsTrue(table[1]["F"]);  // 01
+            Assert.IsTrue(table[2]["F"]);  // 10
+            Assert.IsTrue(table[3]["F"]);  // 11
+        }
+
+        [TestMethod]
+        public void BuildTruthTable_VectorNode_CorrectMapping()
+        {
+            var node = new Node(NodeType.Vector, "1001")
+            {
+                Variables = new List<string> { "x", "y" } // x - старший бит
+            };
+
+            var table = builder.BuildTruthTable(node);
+
+            Assert.AreEqual(4, table.Count);
+            Assert.AreEqual(true, table[0]["F"]);  // 00 -> '1'
+            Assert.AreEqual(false, table[1]["F"]); // 01 -> '0'
+            Assert.AreEqual(false, table[2]["F"]); // 10 -> '0'
+            Assert.AreEqual(true, table[3]["F"]);  // 11 -> '1'
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception), "Переменные для вектора не определены")]
+        public void EvaluateVector_WithoutVariableList_Throws()
+        {
+            var node = new Node(NodeType.Vector, "1010");
+            // Не указаны переменные
+            builder.BuildTruthTable(node); // вызовет EvaluateVector => исключение
+        }
+    }
+
+    [TestClass]
+    public class SyntaxAnalyzerTests
+    {
+        private SyntaxAnalyzer analyzer;
+
+        [TestInitialize]
+        public void SetUp()
+        {
+            analyzer = new SyntaxAnalyzer();
+        }
+
+        [TestMethod]
+        public void Parse_SingleVariable_ReturnsVariableNode()
+        {
+            var node = analyzer.Parse("x");
+
+            Assert.AreEqual(NodeType.Variable, node.Type);
+            Assert.AreEqual("x", node.Value);
+        }
+
+        [TestMethod]
+        public void Parse_ConstantOne_ReturnsConstantNode()
+        {
+            var node = analyzer.Parse("1");
+
+            Assert.AreEqual(NodeType.Constant, node.Type);
+            Assert.AreEqual("1", node.Value);
+        }
+
+        [TestMethod]
+        public void Parse_NotOperator_ReturnsNotNode()
+        {
+            var node = analyzer.Parse("¬x");
+
+            Assert.AreEqual(NodeType.Not, node.Type);
+            Assert.AreEqual(NodeType.Variable, node.Right.Type);
+            Assert.AreEqual("x", node.Right.Value);
+        }
+
+        [TestMethod]
+        public void Parse_AndExpression_ReturnsAndNode()
+        {
+            var node = analyzer.Parse("x∧y");
+
+            Assert.AreEqual(NodeType.And, node.Type);
+            Assert.AreEqual("x", node.Left.Value);
+            Assert.AreEqual("y", node.Right.Value);
+        }
+
+        [TestMethod]
+        public void Parse_ExpressionWithParentheses_ReturnsCorrectTree()
+        {
+            var node = analyzer.Parse("(x∨y)∧z");
+
+            Assert.AreEqual(NodeType.And, node.Type);
+            Assert.AreEqual(NodeType.Or, node.Left.Type);
+            Assert.AreEqual("z", node.Right.Value);
+        }
+
+        [TestMethod]
+        public void Parse_ImpliesExpression_ReturnsImpliesNode()
+        {
+            var node = analyzer.Parse("x→y");
+
+            Assert.AreEqual(NodeType.Implies, node.Type);
+            Assert.AreEqual("x", node.Left.Value);
+            Assert.AreEqual("y", node.Right.Value);
+        }
+
+        [TestMethod]
+        public void Parse_EquivalentExpression_ReturnsEquivalentNode()
+        {
+            var node = analyzer.Parse("x↔y");
+
+            Assert.AreEqual(NodeType.Equivalent, node.Type);
+            Assert.AreEqual("x", node.Left.Value);
+            Assert.AreEqual("y", node.Right.Value);
+        }
+
+        [TestMethod]
+        public void Parse_ValidVector_ReturnsVectorNode()
+        {
+            var node = analyzer.Parse("0101");
+
+            Assert.AreEqual(NodeType.Vector, node.Type);
+            Assert.AreEqual("0101", node.Value);
+            CollectionAssert.AreEqual(new List<string> { "w", "x" }, node.Variables);
+        }
+
+        [TestMethod]
+        public void Parse_VectorInsideExpression_ThrowsException()
+        {
+            var ex = Assert.ThrowsException<ArgumentException>(() => analyzer.Parse("x∧0101"));
+            StringAssert.Contains(ex.Message, "Вектор не может находиться внутри выражения");
+        }
+
+        [TestMethod]
+        public void Parse_EmptyInput_ThrowsException()
+        {
+            var ex = Assert.ThrowsException<ArgumentException>(() => analyzer.Parse(""));
+            StringAssert.Contains(ex.Message, "Ввод не может быть пустым");
+        }
+
+        [TestMethod]
+        public void Parse_InvalidSymbol_ThrowsException()
+        {
+            var ex = Assert.ThrowsException<ArgumentException>(() => analyzer.Parse("x$y"));
+            StringAssert.Contains(ex.Message, "Неожиданный символ");
+        }
+
+        [TestMethod]
+        public void Parse_MissingClosingParenthesis_ThrowsException()
+        {
+            var ex = Assert.ThrowsException<ArgumentException>(() => analyzer.Parse("(x∨y"));
+            StringAssert.Contains(ex.Message, "Ожидалось ')'");
+        }
+
+        [TestMethod]
+        public void Parse_VectorLengthNotPowerOfTwo_ThrowsException()
+        {
+            var ex = Assert.ThrowsException<ArgumentException>(() => analyzer.Parse("011"));
+            StringAssert.Contains(ex.Message, "Вектор должен быть длины степени два");
         }
     }
 }
