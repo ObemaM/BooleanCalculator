@@ -8,12 +8,36 @@ namespace BooleanMinimizerLibrary
         private string expr;
         private char currentChar;
         private int pos;
+        private bool parsingPureVector = false;
 
         public Node Parse(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
                 throw new ArgumentException("Ошибка: Ввод не может быть пустым.");
 
+            input = input.Replace(" ", "");
+
+            if (IsPureVectorInput(input))
+            {
+                parsingPureVector = true;
+                var variables = new List<string>();
+                int numVars = (int)Math.Log(input.Length, 2);
+                for (int i = 0; i < numVars; i++)
+                {
+                    variables.Add(i switch
+                    {
+                        0 => "w",
+                        1 => "x",
+                        2 => "y",
+                        3 => "z",
+                        _ => throw new Exception("Максимум 4 переменные")
+                    });
+                }
+
+                return new Node(NodeType.Vector, input) { Variables = variables };
+            }
+
+            parsingPureVector = false;
             expr = input;
             pos = 0;
             NextChar();
@@ -26,6 +50,9 @@ namespace BooleanMinimizerLibrary
 
         private void NextChar()
         {
+            while (pos < expr.Length && char.IsWhiteSpace(expr[pos]))
+                pos++;
+
             currentChar = (pos < expr.Length) ? expr[pos++] : '\0';
         }
 
@@ -114,6 +141,9 @@ namespace BooleanMinimizerLibrary
             {
                 if (IsVector())
                 {
+                    if (!parsingPureVector)
+                        ThrowError("Вектор не может находиться внутри выражения");
+
                     string vector = ReadVector();
 
                     int numVars = (int)Math.Log(vector.Length, 2);
@@ -188,5 +218,15 @@ namespace BooleanMinimizerLibrary
         }
 
         private bool IsPowerOfTwo(int n) => n > 0 && (n & (n - 1)) == 0;
+
+        private bool IsPureVectorInput(string input)
+        {
+            foreach (char ch in input)
+            {
+                if (ch != '0' && ch != '1')
+                    return false;
+            }
+            return input.Length >= 4 && IsPowerOfTwo(input.Length);
+        }
     }
 }

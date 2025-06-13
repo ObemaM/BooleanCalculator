@@ -9,7 +9,7 @@
 
     <form asp-action="Index" method="post">
         <label for="inputField">Введите функцию или её вектор:</label>
-        <input type="text" asp-for="InputFunction" id="inputField" placeholder="Например: 01110110"
+        <input type="text" asp-for="InputFunction" id="inputField" maxlength="64" placeholder="Например: 01110110"
                data-help="Введите логическое выражение или вектор функции. Например: 01110110 или (x ∧ y) ∨ ¬z">
 
         <div class="button-container">
